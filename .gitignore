@@ -1,0 +1,63 @@
+node_modules
+typings/
+*.js
+*.css
+*.pyc
+.sass*
+!src/vm/utils/vendors/*.js
+!index.js
+!src/ipFinder.js
+!src/assets/vendors/ua-parser.min.js
+#tradingview library
+!src/assets/vendors/charting_library/*
+!src/assets/vendors/charting_library/static/bundles/library.a1e40c9db8bb95dd3984e2095548d0f3.rtl.css
+!src/assets/vendors/charting_library/static/bundles/library.a1e40c9db8bb95dd3984e2095548d0f3.css
+
+# !src/assets/vendors/charting_library/static/bundles/*.js
+*.js.map
+vm/config.json
+
+# compiled output
+dist/*
+tmp
+out-tsc
+.angular-cli.json
+environments.json
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+
+# misc
+.sass-cache
+connect.lock
+coverage
+libpeerconnection.log
+npm-debug.log
+testem.log
+
+# e2e
+e2e/*.js
+e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+
+**/*.ngfactory.*
+**/*.ngsummary.*
+**/*.shim.ngstyle.*
+.gradle/
+.idea/
+
+#pasta upload
+portal-carteira/
+package-lock.json

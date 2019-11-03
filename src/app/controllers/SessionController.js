@@ -45,8 +45,11 @@ class SessionController {
       });
 
     const { username, password } = req.body;
+    const user = await User.findOne({ where: { username } }).catch(error =>
+      console.log("error")
+    );
 
-    const user = await User.findOne({ where: { username } });
+    console.log(">>>> ", user);
 
     if (!user) {
       return res.status(401).json({

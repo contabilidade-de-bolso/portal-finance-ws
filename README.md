@@ -25,3 +25,9 @@ docker run \
 - Execute o comando `yarn add`, para adicionar **dependencias**.
 - Execute o comando `yarn sequelize db:migrate`, para criação das tabelas.
 - Execute o comando `yarn dev`, para rodar projeto.
+
+## Atribuindo dados as tabelas de domínio.
+
+ - Faça uma requisição GET para http://localhost:3333/adm/insertDmCategory
+ - Faça uma requisição GET para http://localhost:3333/adm/insertDmCategorySub
+ - Faça uma requisição GET para http://localhost:3333/adm/insertDmTransactionType

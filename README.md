@@ -22,6 +22,6 @@ docker run \
 
 ## Instalando dependencias e criando tabelas com sequelize utilizando o yarn.
 
-- Execute o comando `shell yarn add`, para adicionar **dependencias**.
-- Execute o comando `shell yarn sequelize db:migrate`, para criação das tabelas.
-- Execute o comando `shell yarn dev`, para rodar projeto.
+- Execute o comando `yarn add`, para adicionar **dependencias**.
+- Execute o comando `yarn sequelize db:migrate`, para criação das tabelas.
+- Execute o comando `yarn dev`, para rodar projeto.

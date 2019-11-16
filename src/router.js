@@ -90,4 +90,9 @@ routes.post(
   TransactionDetailController.getDetailCardChart
 );
 
+routes.post(
+  "/resume/transactionDetail/getTransactionDetailGrid",
+  TransactionDetailController.getTransactionDetailGrid
+);
+
 export default routes;

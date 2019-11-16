@@ -190,6 +190,44 @@ class TransactionDetailController {
       sucess: true
     });
   }
+
+  async getTransactionDetailGrid(req, res) {
+    var resume = await Transaction.findAll({
+      attributes: [
+        "id",
+        "category_group_id",
+        "category_group_sub_id",
+        "nm_transaction",
+        "dt_transaction",
+        "vl_transaction",
+        "pending"
+      ],
+      include: [
+        {
+          model: CategoryGroup,
+          as: "category_group",
+          attributes: ["nm_category_group"]
+        },
+        {
+          model: CategoryGroupSub,
+          as: "category_group_sub",
+          attributes: ["nm_category_group_sub"]
+        }
+      ],
+      where: {
+        user_id: req.userId,
+        dt_transaction: {
+          [Sequelize.Op.between]: [
+            format(startOfMonth(new Date()), "yyyyMMdd"),
+            format(endOfMonth(new Date()), "yyyyMMdd")
+          ]
+        }
+      },
+      order: [["dt_transaction", "ASC"]]
+    });
+
+    return res.json({ result: resume, sucess: true });
+  }
 }
 
 export default new TransactionDetailController();

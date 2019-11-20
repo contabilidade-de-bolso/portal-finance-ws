@@ -66,7 +66,7 @@ class TransactionDetailController {
     NOT_PENDING["type"] = "NOT_PENDING";
     BALANCE["type"] = "BALANCE";
 
-    return res.json({ result: [PENDING, NOT_PENDING, BALANCE], sucess: true });
+    return res.json({ result: [PENDING, NOT_PENDING, BALANCE], success: true });
   }
 
   async getDetailCardChart(req, res) {
@@ -187,7 +187,7 @@ class TransactionDetailController {
 
     return res.json({
       result: { PENDING, NOT_PENDING, BALANCE, CATEGORIES },
-      sucess: true
+      success: true
     });
   }
 
@@ -226,7 +226,78 @@ class TransactionDetailController {
       order: [["dt_transaction", "ASC"]]
     });
 
-    return res.json({ result: resume, sucess: true });
+    return res.json({ result: resume, success: true });
+  }
+
+  async updateTransactionPending(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number()
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({
+        success: false,
+        error: "Erro no tipo de dados."
+      });
+    }
+
+    const transaction = await Transaction.findByPk(req.body.id, {
+      where: {
+        user_id: req.userId
+      }
+    });
+
+    if (!transaction)
+      return res.status(400).json({
+        success: false,
+        error: "Transação não encontrada."
+      });
+
+    await transaction.update(
+      { pending: false },
+      {
+        where: {
+          id: req.body.id,
+          user_id: req.userId
+        }
+      }
+    );
+
+    return res.json({ result: true, success: true });
+  }
+
+  async deleteTransaction(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number()
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({
+        success: false,
+        error: "Erro no tipo de dados."
+      });
+    }
+
+    const transaction = await Transaction.findByPk(req.body.id, {
+      where: {
+        user_id: req.userId
+      }
+    });
+
+    if (!transaction)
+      return res.status(400).json({
+        success: false,
+        error: "Transação não encontrada."
+      });
+
+    await transaction.destroy({
+      where: {
+        id: req.body.id,
+        user_id: req.userId
+      }
+    });
+
+    return res.json({ result: true, success: true });
   }
 }
 

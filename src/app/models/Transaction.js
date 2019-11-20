@@ -11,7 +11,8 @@ class Transaction extends Model {
         vl_transaction: Sequelize.NUMBER,
         dt_transaction: Sequelize.INTEGER,
         ds_transaction: Sequelize.STRING,
-        cd_transaction_type: Sequelize.STRING
+        cd_transaction_type: Sequelize.STRING,
+        pending: Sequelize.BOOLEAN
       },
       {
         sequelize

@@ -95,4 +95,14 @@ routes.post(
   TransactionDetailController.getTransactionDetailGrid
 );
 
+routes.post(
+  "/resume/transactionDetail/updateTransactionPending",
+  TransactionDetailController.updateTransactionPending
+);
+
+routes.post(
+  "/resume/transactionDetail/deleteTransaction",
+  TransactionDetailController.deleteTransaction
+);
+
 export default routes;

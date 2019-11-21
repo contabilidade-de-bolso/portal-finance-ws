@@ -200,7 +200,9 @@ class TransactionDetailController {
         "nm_transaction",
         "dt_transaction",
         "vl_transaction",
-        "pending"
+        "ds_transaction",
+        "pending",
+        "cd_transaction_type"
       ],
       include: [
         {
@@ -211,7 +213,12 @@ class TransactionDetailController {
         {
           model: CategoryGroupSub,
           as: "category_group_sub",
-          attributes: ["nm_category_group_sub"]
+          attributes: [
+            "id",
+            "category_group_id",
+            "cd_category_group_sub",
+            "nm_category_group_sub"
+          ]
         }
       ],
       where: {

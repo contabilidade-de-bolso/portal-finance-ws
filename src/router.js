@@ -45,6 +45,11 @@ routes.post(
   TransactionController.insertTransaction
 );
 
+routes.post(
+  "/transaction/updateTransaction",
+  TransactionController.updateTransaction
+);
+
 //ADM
 routes.get("/adm/insertDmCategory", AdmController.insertDmCategory);
 routes.get("/adm/insertDmCategorySub", AdmController.insertDmCategorySub);

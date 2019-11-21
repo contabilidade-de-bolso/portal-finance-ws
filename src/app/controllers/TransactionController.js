@@ -70,7 +70,7 @@ class TransactionController {
     if (!transaction)
       return res.status(400).json({
         success: false,
-        errormessage: "Transação não encontrada.",
+        errormessage: "Operação não encontrada.",
         errocode: "TRANSACTION_NOT_FOUND"
       });
 

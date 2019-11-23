@@ -56,7 +56,7 @@ class TransactionDetailController {
 
       result.push({
         name: item.name,
-        vl_transaction: parseFloat(array[item.column]),
+        vl_transaction: parseFloat(array[item.column]) | 0,
         cd_transaction_type: "AMB"
       });
     });

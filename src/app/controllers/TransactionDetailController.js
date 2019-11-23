@@ -8,65 +8,61 @@ import { startOfMonth, format, endOfMonth } from "date-fns";
 
 class TransactionDetailController {
   async getDetailCard(req, res) {
-    const { cd_transaction_type } = req.body;
-    var where = {
-      user_id: req.userId,
-      cd_transaction_type,
-      pending: false
-    };
+    const listResult = [
+      {
+        name: "TO_RECEIVE",
+        pending: true,
+        cd_transaction_type: "ENT",
+        column: "vl_transaction"
+      },
+      {
+        name: "RECEIVED",
+        pending: false,
+        cd_transaction_type: "ENT",
+        column: "vl_transaction"
+      },
+      {
+        name: "PAYABLE",
+        pending: true,
+        cd_transaction_type: "SAI",
+        column: "vl_transaction"
+      },
+      {
+        name: "PAID",
+        pending: false,
+        cd_transaction_type: "SAI",
+        column: "vl_transaction"
+      }
+    ];
 
-    where = JSON.parse(JSON.stringify(where));
-    where["dt_transaction"] = {
-      [Sequelize.Op.between]: [
-        format(startOfMonth(new Date()), "yyyyMMdd"),
-        format(endOfMonth(new Date()), "yyyyMMdd")
-      ]
-    };
+    var result = [];
+    var promises = listResult.map(async item => {
+      const [array] = await Transaction.findAll({
+        attributes: [
+          [Sequelize.fn("sum", Sequelize.col(item.column)), item.column]
+        ],
+        where: {
+          user_id: req.userId,
+          dt_transaction: {
+            [Sequelize.Op.between]: [
+              format(startOfMonth(new Date()), "yyyyMMdd"),
+              format(endOfMonth(new Date()), "yyyyMMdd")
+            ]
+          },
+          pending: item.pending,
+          cd_transaction_type: item.cd_transaction_type
+        }
+      });
 
-    var [not_pending] = await Transaction.findAll({
-      attributes: [
-        [Sequelize.fn("sum", Sequelize.col("vl_transaction")), "vl_transaction"]
-      ],
-      where
+      result.push({
+        name: item.name,
+        vl_transaction: parseFloat(array[item.column]),
+        cd_transaction_type: "AMB"
+      });
     });
 
-    where["pending"] = true;
-    var [pending] = await Transaction.findAll({
-      attributes: [
-        [Sequelize.fn("sum", Sequelize.col("vl_transaction")), "vl_transaction"]
-      ],
-      where
-    });
-
-    const cd_transaction_type_resp =
-      cd_transaction_type != "ENT" || cd_transaction_type != "SAI"
-        ? "AMB"
-        : cd_transaction_type;
-
-    let PENDING = {
-      cd_transaction_type: cd_transaction_type_resp,
-      value: parseFloat(
-        pending.vl_transaction ? parseFloat(pending.vl_transaction) : 0
-      )
-    };
-
-    let NOT_PENDING = {
-      cd_transaction_type: cd_transaction_type_resp,
-      value: parseFloat(
-        not_pending.vl_transaction ? parseFloat(not_pending.vl_transaction) : 0
-      )
-    };
-
-    let BALANCE = {
-      cd_transaction_type: cd_transaction_type_resp,
-      value: PENDING["value"] - NOT_PENDING["value"]
-    };
-
-    PENDING["type"] = "PENDING";
-    NOT_PENDING["type"] = "NOT_PENDING";
-    BALANCE["type"] = "BALANCE";
-
-    return res.json({ result: [PENDING, NOT_PENDING, BALANCE], success: true });
+    await Promise.all(promises);
+    return res.json({ result, success: true });
   }
 
   async getDetailCardChart(req, res) {
@@ -230,8 +226,18 @@ class TransactionDetailController {
           ]
         }
       },
-      order: [["dt_transaction", "ASC"]]
+      order: [["vl_transaction", "DESC"]]
     });
+
+    resume = resume
+      .map(item => {
+        if (item.cd_transaction_type == "SAI")
+          item.vl_transaction = -1 * item.vl_transaction;
+
+        item.nm_category_group = item.category_group.nm_category_group;
+        return item;
+      })
+      .sort((a, b) => b.vl_transaction - a.vl_transaction);
 
     return res.json({ result: resume, success: true });
   }

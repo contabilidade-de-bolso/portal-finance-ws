@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import jwt from "jsonwebtoken";
 import User from "../models/User";
+import Transaction from "../models/Transaction";
 import authConf from "../../config/auth";
 
 let message = "Token inválido.";
@@ -49,8 +50,6 @@ class SessionController {
       console.log("error")
     );
 
-    console.log(">>>> ", user);
-
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -69,13 +68,23 @@ class SessionController {
 
     const { id, name, email } = user;
 
+    const firstTransaction = await Transaction.findOne({
+      attributes: ["dt_transaction"],
+      where: {
+        user_id: id
+      },
+      limit: 1,
+      order: [["dt_transaction", "DESC"]]
+    });
+
     return res.json({
       success: true,
       result: {
         user: { id, name, email, username },
         token: jwt.sign({ id }, authConf.secret, {
           expiresIn: authConf.expiresIn
-        })
+        }),
+        firstTransaction
       }
     });
   }

@@ -8,6 +8,8 @@ import { startOfMonth, format, endOfMonth } from "date-fns";
 
 class TransactionDetailController {
   async getDetailCard(req, res) {
+    var { currentDate } = req.body;
+
     const listResult = [
       {
         name: "TO_RECEIVE",
@@ -49,10 +51,29 @@ class TransactionDetailController {
           user_id: req.userId,
           dt_transaction: {
             [Sequelize.Op.between]: [
-              format(startOfMonth(new Date()), "yyyyMMdd"),
-              format(endOfMonth(new Date()), "yyyyMMdd")
+              format(
+                startOfMonth(
+                  new Date(
+                    currentDate.year,
+                    currentDate.month - 1,
+                    currentDate.day
+                  )
+                ),
+                "yyyyMMdd"
+              ),
+              format(
+                endOfMonth(
+                  new Date(
+                    currentDate.year,
+                    currentDate.month - 1,
+                    currentDate.day
+                  )
+                ),
+                "yyyyMMdd"
+              )
             ]
           },
+
           pending: item.pending,
           cd_transaction_type: item.cd_transaction_type
         }
@@ -71,6 +92,7 @@ class TransactionDetailController {
   }
 
   async getDetailCardChart(req, res) {
+    var { currentDate } = req.body;
     const { cd_transaction_type } = req.body;
     const include = [
       {
@@ -93,8 +115,18 @@ class TransactionDetailController {
     where = JSON.parse(JSON.stringify(where));
     where["dt_transaction"] = {
       [Sequelize.Op.between]: [
-        format(startOfMonth(new Date()), "yyyyMMdd"),
-        format(endOfMonth(new Date()), "yyyyMMdd")
+        format(
+          startOfMonth(
+            new Date(currentDate.year, currentDate.month - 1, currentDate.day)
+          ),
+          "yyyyMMdd"
+        ),
+        format(
+          endOfMonth(
+            new Date(currentDate.year, currentDate.month - 1, currentDate.day)
+          ),
+          "yyyyMMdd"
+        )
       ]
     };
 
@@ -131,8 +163,18 @@ class TransactionDetailController {
     where = JSON.parse(JSON.stringify(where));
     where["dt_transaction"] = {
       [Sequelize.Op.between]: [
-        format(startOfMonth(new Date()), "yyyyMMdd"),
-        format(endOfMonth(new Date()), "yyyyMMdd")
+        format(
+          startOfMonth(
+            new Date(currentDate.year, currentDate.month - 1, currentDate.day)
+          ),
+          "yyyyMMdd"
+        ),
+        format(
+          endOfMonth(
+            new Date(currentDate.year, currentDate.month - 1, currentDate.day)
+          ),
+          "yyyyMMdd"
+        )
       ]
     };
 
@@ -193,6 +235,7 @@ class TransactionDetailController {
   }
 
   async getTransactionDetailGrid(req, res) {
+    var { currentDate } = req.body;
     var resume = await Transaction.findAll({
       attributes: [
         "id",
@@ -226,8 +269,26 @@ class TransactionDetailController {
         user_id: req.userId,
         dt_transaction: {
           [Sequelize.Op.between]: [
-            format(startOfMonth(new Date()), "yyyyMMdd"),
-            format(endOfMonth(new Date()), "yyyyMMdd")
+            format(
+              startOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            ),
+            format(
+              endOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            )
           ]
         }
       },

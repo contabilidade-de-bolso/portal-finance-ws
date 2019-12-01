@@ -26,12 +26,10 @@ class UserController {
     });
 
     if (userExist)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          errormessage: `E-mail ${req.body.email} já existe.`
-        });
+      return res.status(400).json({
+        success: false,
+        errormessage: `E-mail ${req.body.email} já existe.`
+      });
 
     const { id_user, name, username, email } = await User.create(req.body);
     return res.json({

@@ -8,6 +8,8 @@ import { startOfMonth, format, endOfMonth } from "date-fns";
 
 class ResumeTransactionController {
   async getResumeTransaction(req, res) {
+    var { currentDate } = req.body;
+
     var resume = await Transaction.findAll({
       attributes: [
         "category_group_id",
@@ -24,8 +26,26 @@ class ResumeTransactionController {
         user_id: req.userId,
         dt_transaction: {
           [Sequelize.Op.between]: [
-            format(startOfMonth(new Date()), "yyyyMMdd"),
-            format(endOfMonth(new Date()), "yyyyMMdd")
+            format(
+              startOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            ),
+            format(
+              endOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            )
           ]
         }
       },
@@ -49,6 +69,8 @@ class ResumeTransactionController {
   }
 
   async getResumeTransactionGrid(req, res) {
+    var { currentDate } = req.body;
+
     var resume = await Transaction.findAll({
       attributes: [
         "dt_transaction",
@@ -73,8 +95,26 @@ class ResumeTransactionController {
         user_id: req.userId,
         dt_transaction: {
           [Sequelize.Op.between]: [
-            format(startOfMonth(new Date()), "yyyyMMdd"),
-            format(endOfMonth(new Date()), "yyyyMMdd")
+            format(
+              startOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            ),
+            format(
+              endOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            )
           ]
         }
       },
@@ -95,6 +135,7 @@ class ResumeTransactionController {
   }
 
   async getResumeTransactionSubCategory(req, res) {
+    var { currentDate } = req.body;
     const schema = Yup.object().shape({
       category_group_id: Yup.number().required()
     });
@@ -121,8 +162,26 @@ class ResumeTransactionController {
         category_group_id,
         dt_transaction: {
           [Sequelize.Op.between]: [
-            format(startOfMonth(new Date()), "yyyyMMdd"),
-            format(endOfMonth(new Date()), "yyyyMMdd")
+            format(
+              startOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            ),
+            format(
+              endOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            )
           ]
         }
       }
@@ -142,6 +201,8 @@ class ResumeTransactionController {
   }
 
   async getResumeTransactionGridSubCategoria(req, res) {
+    var { currentDate } = req.body;
+
     const schema = Yup.object().shape({
       category_group_id: Yup.number().required()
     });
@@ -184,8 +245,26 @@ class ResumeTransactionController {
         user_id: req.userId,
         dt_transaction: {
           [Sequelize.Op.between]: [
-            format(startOfMonth(new Date()), "yyyyMMdd"),
-            format(endOfMonth(new Date()), "yyyyMMdd")
+            format(
+              startOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            ),
+            format(
+              endOfMonth(
+                new Date(
+                  currentDate.year,
+                  currentDate.month - 1,
+                  currentDate.day
+                )
+              ),
+              "yyyyMMdd"
+            )
           ]
         }
       },
@@ -205,13 +284,25 @@ class ResumeTransactionController {
   }
 
   async getDetailDashboard(req, res) {
+    var { currentDate } = req.body;
+
     var where = {
       user_id: req.userId,
       cd_transaction_type: "ENT",
       dt_transaction: {
         [Sequelize.Op.between]: [
-          format(startOfMonth(new Date()), "yyyyMMdd"),
-          format(endOfMonth(new Date()), "yyyyMMdd")
+          format(
+            startOfMonth(
+              new Date(currentDate.year, currentDate.month - 1, currentDate.day)
+            ),
+            "yyyyMMdd"
+          ),
+          format(
+            endOfMonth(
+              new Date(currentDate.year, currentDate.month - 1, currentDate.day)
+            ),
+            "yyyyMMdd"
+          )
         ]
       }
     };
@@ -233,7 +324,10 @@ class ResumeTransactionController {
       id: "REC",
       title: "Receita",
       value: value,
-      date: format(new Date(), "yyyyMMdd"),
+      date: format(
+        new Date(currentDate.year, currentDate.month - 1, currentDate.day),
+        "yyyyMMdd"
+      ),
       graph: dataREC
         .map(item => [item.nm_transaction, parseFloat(item.vl_transaction)])
         .sort((a, b) => b[1] - a[1])
@@ -246,7 +340,10 @@ class ResumeTransactionController {
       id: "DES",
       title: "Despesa",
       value: value,
-      date: format(new Date(), "yyyyMMdd"),
+      date: format(
+        new Date(currentDate.year, currentDate.month - 1, currentDate.day),
+        "yyyyMMdd"
+      ),
       graph: dataDES
         .map(item => [item.nm_transaction, parseFloat(item.vl_transaction)])
         .sort((a, b) => b[1] - a[1])
@@ -257,7 +354,10 @@ class ResumeTransactionController {
       id: "SAL",
       title: "Balanço",
       value: REC["value"] - DES["value"],
-      date: format(new Date(), "yyyyMMdd"),
+      date: format(
+        new Date(currentDate.year, currentDate.month - 1, currentDate.day),
+        "yyyyMMdd"
+      ),
       graph: [["Receitas", REC["value"]], ["Despesas", DES["value"]]]
     };
 

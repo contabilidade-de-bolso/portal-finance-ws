@@ -9,6 +9,7 @@ import AdmController from "./app/controllers/AdmController";
 import TransactionController from "./app/controllers/TransactionController";
 import ResumeTransactionController from "./app/controllers/ResumeTransactionController";
 import TransactionDetailController from "./app/controllers/TransactionDetailController";
+import NewJourneyController from "./app/controllers/NewJourneyController";
 
 const routes = new Router();
 
@@ -82,6 +83,12 @@ routes.post(
 routes.post(
   "/resume/transaction/getDetailDashboard",
   ResumeTransactionController.getDetailDashboard
+);
+
+//NewJourney
+routes.post(
+  "/newjourney/checkTransaction",
+  NewJourneyController.checkTransaction
 );
 
 //TransactionDetail

@@ -13,25 +13,29 @@ class TransactionDetailController {
         name: "TO_RECEIVE",
         pending: true,
         cd_transaction_type: "ENT",
-        column: "vl_transaction"
+        column: "vl_transaction",
+        index: 1
       },
       {
         name: "RECEIVED",
         pending: false,
         cd_transaction_type: "ENT",
-        column: "vl_transaction"
+        column: "vl_transaction",
+        index: 3
       },
       {
         name: "PAYABLE",
         pending: true,
         cd_transaction_type: "SAI",
-        column: "vl_transaction"
+        column: "vl_transaction",
+        index: 2
       },
       {
         name: "PAID",
         pending: false,
         cd_transaction_type: "SAI",
-        column: "vl_transaction"
+        column: "vl_transaction",
+        index: 4
       }
     ];
 
@@ -57,7 +61,8 @@ class TransactionDetailController {
       result.push({
         name: item.name,
         vl_transaction: parseFloat(array[item.column]) | 0,
-        cd_transaction_type: "AMB"
+        cd_transaction_type: "AMB",
+        index: item.index
       });
     });
 
